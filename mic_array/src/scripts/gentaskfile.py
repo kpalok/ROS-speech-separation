@@ -35,7 +35,7 @@ def pairSpeakers(file):
     speakers.sort(key=getLength)
 
     pairs = []
-    for i in range(0, 10, 2):
+    for i in range(0, len(speakers)-1, 2):
         pairs.append((speakers[i][0], speakers[i+1][0]))
 
     return pairs
@@ -65,7 +65,8 @@ def pairFiles(speakers, type):
 def main():
     #clear previous task files
     data_types = ['train-clean-100', 'dev', 'test']
-    open("{0}}/train-clean-100/task.txt".format(LIBRISPEECH_PATH), 'w').close()
+    for d in data_types:
+        open("{0}/{1}/task.txt".format(LIBRISPEECH_PATH, d), 'w').close()
 
     #training
     pairs_tr = pairSpeakers('{0}/SPEAKERS_TR.TXT'.format(LIBRISPEECH_PATH))
