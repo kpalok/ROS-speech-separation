@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import separate
+import argparse
 import struct
 import time, datetime
 import os
@@ -18,7 +20,7 @@ def getPublishFolder():
     
     return pubDirName
 
-def speech_segregation():
+def speech_segregation(args):
 
     while True:
         segregatedFrames = []
@@ -26,31 +28,19 @@ def speech_segregation():
         # check if any audio inputs have been captured
         try:
             wav = wave.open(Audio.WAVE_OUTPUT_FILENAME, 'r')
-            length = wav.getnframes()
+            # if file is found, append it to wave_scp with timestamp as key
+            dt = datetime.datetime.now()
+            timestamp = "%04d%02d%02d%02d%02d%02d" % (dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
+            with open(args.wave_scp, 'a') as scp:
+                scp.write("{} {}\n".format(timestamp, Audio.WAVE_OUTPUT_FILENAME))
 
-            waveData = wav.readframes(length)
-            segregatedFrames.append(waveData)
-            data = struct.unpack("<{0}h".format(length), waveData)
-            wav.close()
-            os.remove(Audio.WAVE_OUTPUT_FILENAME)
+            separationProcess = Process(target=separate.run, args=args)
+            separationProcess.start()
         except Exception:
             time.sleep(1)
             continue
-            
-        # do speech segregation to found single channel audio
-
-        # publish segregated channels
-        for i in range(0, len(segregatedFrames)):
-            dt = datetime.datetime.now()
-            timestamp = "%04d%02d%02d%02d%02d%02d" % (dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
-
-            # tallennetaan eroteltu puhe filuina aikaleiman kanssa jotta uniikit tiedostonimet
-            wf = wave.open(os.path.join(getPublishFolder(), "{0}_{1}".format(timestamp, i+1)), 'wb')
-            wf.setnchannels(1)
-            wf.setsampwidth(Audio.getSampleSize())
-            wf.setframerate(Audio.RESPEAKER_RATE)
-            wf.writeframes(segregatedFrames[i])
-            wf.close()
+        finally:
+            wav.close()
 
 
 def main():
@@ -81,8 +71,43 @@ def main():
         rate.sleep()
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description=
+        "Command to run speech separation ROS node"
+    )
+    parser.add_argument(
+        "config", type=str, help="Location of training configure files",
+        default="tune/train.yaml")
+    parser.add_argument(
+        "state_dict", type=str, help="Location of networks state file",
+        default="tune/epoch.19.pkl")
+    parser.add_argument(
+        "wave_scp",
+        type=str,
+        help="Location of input wave scripts in kaldi format",
+        default="wave.scp")
+    parser.add_argument(
+        "--cuda",
+        default=False,
+        action="store_true",
+        dest="cuda",
+        help="If true, inference on GPUs")
+    parser.add_argument(
+        "--dump-dir",
+        type=str,
+        default="cache",
+        dest="dump_dir",
+        help="Location to dump seperated speakers")
+    parser.add_argument(
+        "--dump-mask",
+        default=False,
+        action="store_true",
+        dest="dump_mask",
+        help="If true, dump mask matrix")
+    args = parser.parse_args()
+
     # listen inputs in separate thread
-    process = Process(target=speech_segregation)
+    process = Process(target=speech_segregation, args=args)
     process.start()
     # run main in current thread
     try:

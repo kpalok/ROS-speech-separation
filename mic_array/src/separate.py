@@ -51,7 +51,7 @@ class Separator(object):
         spk_masks = [spk_mask.cpu().data.numpy() for spk_mask in out_masks]
 
         return spk_masks, [spectra * spk_mask for spk_mask in spk_masks]
-
+  
 
 def run(args):
     num_bins, config_dict = parse_yaml(args.config)
@@ -77,6 +77,8 @@ def run(args):
     separator = Separator(dcnet, args.state_dict, cuda=args.cuda)
 
     utt_dict = parse_scps(args.wave_scp)
+    # clear file content
+    open(args.wave_scp, 'w').close()
     num_utts = 0
     for key, utt in utt_dict.items():
         try:
