@@ -62,7 +62,7 @@ PARAMETERS = {
 
 
 class Tuning:
-    TIMEOUT = 100000
+    TIMEOUT = 10000
 
     def __init__(self, dev):
         self.dev = dev
@@ -102,11 +102,15 @@ class Tuning:
 
         length = 8
 
-        response = self.dev.ctrl_transfer(
+        try:
+            response = self.dev.ctrl_transfer(
             usb.util.CTRL_IN | usb.util.CTRL_TYPE_VENDOR | usb.util.CTRL_RECIPIENT_DEVICE,
             0, cmd, id, length, self.TIMEOUT)
 
-        response = struct.unpack(b'ii', response.tostring())
+            response = struct.unpack(b'ii', response.tostring())
+        except Exception as ex:
+            print(ex)
+            return
 
         if data[2] == 'int':
             result = response[0]

@@ -25,8 +25,7 @@ class Separator(object):
                 "Could not find state file {}".format(state_dict))
         self.nnet = nnet
 
-        self.location = None if args.cuda else "cpu"
-        print(self.location)
+        self.location = None if cuda else "cpu"
         self.nnet.load_state_dict(
             th.load(state_dict, map_location=self.location))
         self.nnet.eval()
@@ -114,6 +113,9 @@ def run(args):
                 sio.savemat(
                     os.path.join(args.dump_dir, '{}.spk{}.mat'.format(
                         key, index + 1)), {"mask": spk_mask[index]})
+        # delete utterance file after its processed
+        #os.remove(utt)
+
     print("Processed {} utterance!".format(num_utts))
 
 
