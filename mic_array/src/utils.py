@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 # wujian@2018
-
+# https://github.com/funcwj/uPIT-for-speech-separation
 import os
 import warnings
 import yaml

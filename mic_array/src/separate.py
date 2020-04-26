@@ -114,7 +114,7 @@ def run(args):
                     os.path.join(args.dump_dir, '{}.spk{}.mat'.format(
                         key, index + 1)), {"mask": spk_mask[index]})
         # delete utterance file after its processed
-        #os.remove(utt)
+        os.remove(utt)
 
     print("Processed {} utterance!".format(num_utts))
 

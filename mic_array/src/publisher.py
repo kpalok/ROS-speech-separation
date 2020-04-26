@@ -54,7 +54,8 @@ def main():
             pubDOA.publish(direction)
 
             # start recording in new process so direction publication can continue without waiting for the recording to end
-            audio.record()
+            recordingProcess = Process(target=audio.record)
+            recordingProcess.start()
 
         rate.sleep()
 
