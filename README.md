@@ -2,7 +2,7 @@
 
 ### Requirements
 
-see [mic_array/src/requirements.txt](requirements.txt)
+see [requirements.txt](mic_array/src/requirements.txt)
 
 ### Usage
 
