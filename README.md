@@ -2,7 +2,7 @@
 
 ### Requirements
 
-see [requirements.txt](requirements.txt)
+see [mic_array/src/requirements.txt](requirements.txt)
 
 ### Usage
 
@@ -11,7 +11,7 @@ Add mic_array package to ROS workspace and create/get state dictionary file for 
 Run publisher package:
   ```shell
     rosrun mic_array publisher.py --config tune/train.yaml --state_dict tune/state_dict.pkl
-  ´´´
+  ```
 
 ## Reference
 
