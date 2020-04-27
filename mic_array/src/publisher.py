@@ -10,13 +10,10 @@ import wave
 from audio import Audio
 from multiprocessing import Process
 from std_msgs.msg import Int16
-#ROS_PACKAGE_PATH=/home/osboxes/kandi/src:/opt/ros/melodic/share
 
 def speech_segregation(args):
 
     while True:
-        segregatedFrames = []
-        data = None
         # check if any audio inputs have been captured
         try:
             wav = wave.open(Audio.WAVE_OUTPUT_FILENAME, 'r')
@@ -26,9 +23,11 @@ def speech_segregation(args):
             timestamp = "%04d%02d%02d%02d%02d%02d" % (dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)
             new_filename = "wave{}.wav".format(timestamp)
             os.rename(Audio.WAVE_OUTPUT_FILENAME, new_filename)
-
+            # write file information to separator in format: 
+            # ID filename
             with open(args.wave_scp, 'a') as scp:
                 scp.write("{} {}\n".format(timestamp, new_filename))
+
             separationProcess = Process(target=separate.run, args=(args,))
             separationProcess.start()
         except Exception:
@@ -69,7 +68,7 @@ if __name__ == "__main__":
         default="tune/train.yaml")
     parser.add_argument(
         "--state_dict", type=str, help="Location of networks state file",
-        default="tune/epoch.19.pkl")
+        default="tune/epoch.19.pkl") # HOX pkl file is too large to be saved in git, request from author or create new
     parser.add_argument(
         "--wave_scp",
         type=str,

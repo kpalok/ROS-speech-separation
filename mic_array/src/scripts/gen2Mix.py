@@ -6,7 +6,7 @@ import copy
 
 data_type = ['train-clean-100', 'dev-clean', 'test-clean']
 
-LIBRISPEECH_PATH = "C:/Users/Kalle/Desktop/kandi/LibriSpeech"
+LIBRISPEECH_PATH = ""
 TASKFILE_TR = '{0}/LibriSpeech/train-clean-100/task.txt'.format(LIBRISPEECH_PATH)
 TASKFILE_CV = '{0}/LibriSpeech/dev/task.txt'.format(LIBRISPEECH_PATH)
 TASKFILE_TT = '{0}/LibriSpeech/test/task.txt'.format(LIBRISPEECH_PATH)

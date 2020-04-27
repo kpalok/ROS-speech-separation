@@ -1,7 +1,7 @@
 import os
 import random
 
-LIBRISPEECH_PATH = "C:/Users/Kalle/Desktop/kandi/LibriSpeech"
+LIBRISPEECH_PATH = ""
 
 def getLength(elem):
     return elem[2]

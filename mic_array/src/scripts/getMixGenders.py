@@ -1,7 +1,7 @@
 
 genders = {}
-
-speaker_files = ['D:/kandi/LibriSpeech/dev/mix']
+# scp files containing speaker metadata
+speaker_files = ['']
 
 def getGenders(speakers, pairs):
 
@@ -51,6 +51,4 @@ def getGenders(speakers, pairs):
 
         i += g[1]
     print(i)
-
-getGenders("D:\kandi\LibriSpeech\SPEAKERS-CV.TXT", "D:\\kandi\\LibriSpeech\\dev\\task.txt")
 

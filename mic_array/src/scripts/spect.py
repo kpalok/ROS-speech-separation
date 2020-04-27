@@ -84,5 +84,3 @@ def plotstft(audiopath, binsize=2**10, plotpath=None, colormap="jet"):
     plt.clf()
 
     return ims
-
-ims = plotstft('D:\kandi\LibriSpeech\\test_ev\\55716.spk2.wav')
